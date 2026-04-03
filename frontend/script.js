@@ -57,14 +57,22 @@ async function analyzeEvent() {
         );
 
         let data = await res.json();
+        console.log("AI RESPONSE:", data);
 
-        let suggestions =
-            data.candidates?.[0]?.content?.parts?.[0]?.text ||
-            "No suggestions";
+let suggestions = "No suggestions";
+
+try {
+    if (data.candidates && data.candidates.length > 0) {
+        let parts = data.candidates[0].content.parts;
+        suggestions = parts.map(p => p.text).join(" ");
+    }
+} catch (e) {
+    console.log("Parse error:", e);
+}
 
         document.getElementById("loading").style.display = "none";
 
-        let score = Math.max(0, 100 - (carbon / 100));
+     let score = Math.round(Math.max(0, 100 - (carbon / 100)));
 
         document.getElementById("result").innerHTML = `
             <div class="card">
