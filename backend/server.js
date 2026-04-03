@@ -24,8 +24,11 @@ const db = mysql.createConnection({
 });
 
 db.connect(err => {
-    if (err) throw err;
-    console.log("MySQL Connected");
+    if (err) {
+        console.log("DB not connected ");
+    } else {
+        console.log("MySQL Connected");
+    }
 });
 
 // ================= AI ANALYZE =================
