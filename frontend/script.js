@@ -38,7 +38,7 @@ async function analyzeEvent() {
 
         document.getElementById("loading").style.display = "block";
 
-        let res = await fetch("http://localhost:5000/analyze", {
+        let res = await fetch("https://greensphere-api.onrender.com/analyze", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ eventType, people, food, location, email })
@@ -79,7 +79,7 @@ async function bookEvent() {
         let tickets = document.getElementById("tickets").value;
         let email = localStorage.getItem("email") || "test@mail.com";
 
-        let res = await fetch("http://localhost:5000/booking", {
+        let res = await fetch("https://greensphere-api.onrender.com/booking", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, event, tickets })
@@ -101,7 +101,7 @@ async function addSchedule() {
         let date = document.getElementById("date").value;
         let email = localStorage.getItem("email") || "test@mail.com";
 
-        let res = await fetch("http://localhost:5000/schedule", {
+        let res = await fetch("https://greensphere-api.onrender.com/schedule", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, task, date })
@@ -122,7 +122,7 @@ async function submitFeedback() {
         let message = document.getElementById("feedback").value;
         let email = localStorage.getItem("email") || "test@mail.com";
 
-        let res = await fetch("http://localhost:5000/feedback", {
+        let res = await fetch("https://greensphere-api.onrender.com/feedback", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, message })
