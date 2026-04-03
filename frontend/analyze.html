@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>AI Analyzer</h1>
+
+    <div class="card">
+
+        <select id="eventType">
+            <option>Wedding</option>
+            <option>Conference</option>
+            <option>Food Festival</option>
+            <option>College Fest</option>
+            <option>Other</option>
+        </select>
+
+        <input id="customEvent" placeholder="Custom event" style="display:none;">
+
+        <input type="number" id="people" placeholder="People">
+
+        <select id="food">
+            <option>Low Impact (Plant-heavy)</option>
+            <option>Mixed</option>
+            <option>High Impact (Meat-heavy)</option>
+        </select>
+
+        <select id="state">
+            <option>Tamil Nadu</option>
+            <option>Kerala</option>
+        </select>
+
+        <select id="city">
+            <option>Chennai</option>
+            <option>Kochi</option>
+        </select>
+
+        <button onclick="analyzeEvent()">Analyze</button>
+
+        <p id="loading" style="display:none;">Analyzing...</p>
+    </div>
+
+    <div id="result"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
