@@ -42,7 +42,7 @@ async function analyzeEvent() {
         document.getElementById("loading").style.display = "block";
 
         let res = await fetch(
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=YOUR_API_KEY",
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyC9N-MwzwP-fJFSkGZP7aZps52HGmAqfTo",
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
