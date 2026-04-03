@@ -27,29 +27,29 @@ function go(page) {
 
 // ================= AI ANALYZE =================
 async function analyzeEvent() {
-    let eventType = document.getElementById("eventType").value;
-    let people = document.getElementById("people").value;
-    let food = document.getElementById("food").value;
-    let location = document.getElementById("city").value + ", " +
-                   document.getElementById("state").value;
-
-    let carbon = people * (
-        food.includes("Low") ? 2 :
-        food.includes("Mixed") ? 4 : 6
-    );
-
-    document.getElementById("loading").style.display = "block";
-
     try {
+        let eventType = document.getElementById("eventType").value;
+        let people = document.getElementById("people").value;
+        let food = document.getElementById("food").value;
+        let location = document.getElementById("city").value + ", " +
+                       document.getElementById("state").value;
+
+        let carbon = people * (
+            food.includes("Low") ? 2 :
+            food.includes("Mixed") ? 4 : 6
+        );
+
+        document.getElementById("loading").style.display = "block";
+
         let res = await fetch(
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyAxwZbOTtxSJ00lvR5rZ9OJ41C9g6EZaec",
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=YOUR_API_KEY",
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     contents: [{
                         parts: [{
-                            text: `Give 4 short eco suggestions for a ${eventType} event in ${location} with ${people} people.`
+                            text: `Give 4 short eco suggestions for a ${eventType} event in ${location} with ${people} people. Return as numbered points.`
                         }]
                     }]
                 })
@@ -57,36 +57,35 @@ async function analyzeEvent() {
         );
 
         let data = await res.json();
-        console.log("AI RESPONSE:", data);
+        console.log("FULL RESPONSE:", data);
 
-let suggestions = "No suggestions";
+        let suggestions = "No suggestions";
 
-try {
-    if (data.candidates && data.candidates.length > 0) {
-        let parts = data.candidates[0].content.parts;
-        suggestions = parts.map(p => p.text).join(" ");
-    }
-} catch (e) {
-    console.log("Parse error:", e);
-}
+        if (data.candidates && data.candidates.length > 0) {
+            let parts = data.candidates[0].content.parts;
+
+            if (parts && parts.length > 0) {
+                suggestions = parts.map(p => p.text).join(" ");
+            }
+        }
 
         document.getElementById("loading").style.display = "none";
 
-     let score = Math.round(Math.max(0, 100 - (carbon / 100)));
+        let score = Math.max(0, 100 - (carbon / 100));
 
         document.getElementById("result").innerHTML = `
             <div class="card">
                 <h3>Carbon: ${carbon}</h3>
-                <h3>Score: ${score}</h3>
-                <p>${suggestions.replace(/\*\*/g, "").replace(/\n/g, "<br>")}</p>
+                <h3>Score: ${score.toFixed(1)}</h3>
+                <p>${suggestions.replace(/\n/g, "<br>")}</p>
             </div>
         `;
+
     } catch (err) {
         console.log(err);
         alert("AI failed");
     }
 }
-
 // ================= BOOKING =================
 async function bookEvent() {
     try {
