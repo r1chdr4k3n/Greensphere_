@@ -27,48 +27,55 @@ function go(page) {
 
 // ================= AI ANALYZE =================
 async function analyzeEvent() {
+    let eventType = document.getElementById("eventType").value;
+    let people = document.getElementById("people").value;
+    let food = document.getElementById("food").value;
+    let location = document.getElementById("city").value + ", " +
+                   document.getElementById("state").value;
+
+    let carbon = people * (
+        food.includes("Low") ? 2 :
+        food.includes("Mixed") ? 4 : 6
+    );
+
+    document.getElementById("loading").style.display = "block";
+
     try {
-        let eventType = document.getElementById("eventType").value;
-        let people = document.getElementById("people").value;
-        let food = document.getElementById("food").value;
-        let location = document.getElementById("city").value + ", " +
-                       document.getElementById("state").value;
-
-        let email = localStorage.getItem("email") || "test@mail.com";
-
-        document.getElementById("loading").style.display = "block";
-
-        let res = await fetch("https://greensphere-api.onrender.com/analyze", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ eventType, people, food, location, email })
-        });
+        let res = await fetch(
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=YOUR_API_KEY",
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: `Give 4 short eco suggestions for a ${eventType} event in ${location} with ${people} people.`
+                        }]
+                    }]
+                })
+            }
+        );
 
         let data = await res.json();
 
+        let suggestions =
+            data.candidates?.[0]?.content?.parts?.[0]?.text ||
+            "No suggestions";
+
         document.getElementById("loading").style.display = "none";
 
-        let score = Math.max(0, 100 - (data.carbon / 100));
+        let score = Math.max(0, 100 - (carbon / 100));
 
-let cleanText = data.suggestions
-    .replace(/\*\*/g, "")              // remove **
-    .split(/\d+\.\s+/)                 // split 1. 2. 3.
-    .filter(s => s.trim() !== "")
-    .map(s => `<li>${s.trim()}</li>`)
-    .join("");
-
-       document.getElementById("result").innerHTML = `
-    <div class="card">
-        <h3>Carbon: ${data.carbon}</h3>
-        <h3>Score: ${score.toFixed(1)}</h3>
-
-        <h3>Suggestions</h3>
-        <ul>${cleanText}</ul>
-    </div>
-`;
+        document.getElementById("result").innerHTML = `
+            <div class="card">
+                <h3>Carbon: ${carbon}</h3>
+                <h3>Score: ${score}</h3>
+                <p>${suggestions.replace(/\*\*/g, "").replace(/\n/g, "<br>")}</p>
+            </div>
+        `;
     } catch (err) {
         console.log(err);
-        alert("Error in AI analyze");
+        alert("AI failed");
     }
 }
 
