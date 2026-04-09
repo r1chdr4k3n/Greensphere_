@@ -59,15 +59,18 @@ async function analyzeEvent() {
         let data = await res.json();
         console.log("FULL RESPONSE:", data);
 
-        let suggestions = "No suggestions";
+       let suggestions = "No suggestions";
 
-        if (data.candidates && data.candidates.length > 0) {
-            let parts = data.candidates[0].content.parts;
+try {
+    if (data.candidates && data.candidates.length > 0) {
+        let parts = data.candidates[0].content.parts;
 
-            if (parts && parts.length > 0) {
-                suggestions = parts.map(p => p.text).join(" ");
-            }
-        }
+        suggestions = parts.map(p => p.text).join(" ");
+    }
+} catch (e) {
+    console.log("Parsing error", e);
+}
+    }
 
         document.getElementById("loading").style.display = "none";
 
