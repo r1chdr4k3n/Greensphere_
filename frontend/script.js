@@ -57,20 +57,18 @@ async function analyzeEvent() {
         );
 
         let data = await res.json();
-        console.log("FULL RESPONSE:", data);
+       console.log("AI RESPONSE:", data);
 
-       let suggestions = "No suggestions";
+let suggestions = "No suggestions";
 
 try {
     if (data.candidates && data.candidates.length > 0) {
         let parts = data.candidates[0].content.parts;
-
         suggestions = parts.map(p => p.text).join(" ");
     }
 } catch (e) {
-    console.log("Parsing error", e);
+    console.log("Parse error:", e);
 }
-    }
 
         document.getElementById("loading").style.display = "none";
 
