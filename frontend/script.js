@@ -42,7 +42,7 @@ async function analyzeEvent() {
         document.getElementById("loading").style.display = "block";
 
         let res = await fetch(
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyC9N-MwzwP-fJFSkGZP7aZps52HGmAqfTo",
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyDJAuc29Sxiuz0JEj7IEzmGHzb0MM4gaO4",
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -57,18 +57,17 @@ async function analyzeEvent() {
         );
 
         let data = await res.json();
-       console.log("AI RESPONSE:", data);
+        console.log("FULL RESPONSE:", data);
 
-let suggestions = "No suggestions";
+        let suggestions = "No suggestions";
 
-try {
-    if (data.candidates && data.candidates.length > 0) {
-        let parts = data.candidates[0].content.parts;
-        suggestions = parts.map(p => p.text).join(" ");
-    }
-} catch (e) {
-    console.log("Parse error:", e);
-}
+        if (data.candidates && data.candidates.length > 0) {
+            let parts = data.candidates[0].content.parts;
+
+            if (parts && parts.length > 0) {
+                suggestions = parts.map(p => p.text).join(" ");
+            }
+        }
 
         document.getElementById("loading").style.display = "none";
 
